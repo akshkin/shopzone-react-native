@@ -13,7 +13,7 @@ function CategoriesListItem({ item }: { item: ItemProps }) {
   const { category, imageUrl } = item;
 
   function routeToCategory() {
-    navigation.navigate("Category");
+    navigation.navigate("Category", { category: category });
   }
 
   return (

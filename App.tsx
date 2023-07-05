@@ -5,13 +5,19 @@ import { NavigationContainer } from "@react-navigation/native";
 import Home from "./screens/Home";
 import Category from "./screens/Category";
 
+export type RootStackParamList = {
+  Home: undefined;
+  Category:
+    | {
+        category: string;
+      }
+    | undefined;
+};
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    // <View style={styles.container}>
-    //   <Text>Open up App.tsx to start working on your app!</Text>
-    // </View>
     <>
       <StatusBar style="auto" />
       <NavigationContainer>
