@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
 import Home from "./screens/Home";
 import Category from "./screens/Category";
+import ProductDetail from "./screens/ProductDetail";
 
 export type RootStackParamList = {
   Home: undefined;
@@ -12,9 +13,10 @@ export type RootStackParamList = {
         category: string;
       }
     | undefined;
+  ProductDetail: undefined | { productId: string };
 };
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function App() {
   return (
@@ -24,6 +26,7 @@ export default function App() {
         <Stack.Navigator>
           <Stack.Screen name="Home" component={Home} />
           <Stack.Screen name="Category" component={Category} />
+          <Stack.Screen name="ProductDetail" component={ProductDetail} />
         </Stack.Navigator>
       </NavigationContainer>
     </>

@@ -1,19 +1,25 @@
 import React from "react";
-import { Image, View, Text, StyleSheet } from "react-native";
+import { Image, View, Text, StyleSheet, Pressable } from "react-native";
 import { ProductType } from "../types";
 import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
 type ProductProps = {
   product: ProductType;
 };
 
 function ProductCard({ product }: ProductProps) {
+  const navigation = useNavigation();
   const { title, rating, image, price } = product;
 
   {
     /* <Ionicons name="ios-heart" size={24} color="black" />
       <Ionicons name="ios-cart-sharp" size={24} color="black" />
     */
+  }
+
+  function handlePress() {
+    navigation.navigate("ProductDetail", { productId: product._id });
   }
 
   return (
@@ -30,7 +36,12 @@ function ProductCard({ product }: ProductProps) {
         size={28}
         color="black"
       />
-      <Image style={styles.image} source={{ uri: image }} />
+      <Pressable
+        onPress={handlePress}
+        style={({ pressed }) => (pressed ? { opacity: 0.5 } : {})}
+      >
+        <Image style={styles.image} source={{ uri: image }} />
+      </Pressable>
       <Text style={styles.title}>
         {title.substring(0, 20)}
         {title.length > 20 && "..."}

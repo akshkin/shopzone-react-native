@@ -6,3 +6,5 @@ export const API = axios.create({
 
 export const fetchProductsByCategory = (category: string) =>
   API.get(`/products/category?category=${category}`);
+
+export const fetchProductDetails = (id: string) => API.get(`/products/${id}`);
