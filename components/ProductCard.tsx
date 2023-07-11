@@ -71,12 +71,15 @@ const styles = StyleSheet.create({
     position: "absolute",
     zIndex: 10,
     right: 5,
-    bottom: 12,
+    top: 12,
+    backgroundColor: "white",
+    borderRadius: 40,
+    padding: 4,
   },
   cartIcon: {
     position: "absolute",
     zIndex: 10,
-    right: 40,
+    right: 6,
     bottom: 12,
   },
 });
