@@ -1,5 +1,5 @@
 import React from "react";
-import { FlatList, StyleSheet, Text } from "react-native";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 import CategoriesListItem from "./CategoriesListItem";
 
 const categories = [
@@ -35,19 +35,18 @@ const categories = [
 
 function CategoriesList() {
   return (
-    <FlatList
-      style={styles.list}
-      data={categories}
-      keyExtractor={(category) => category.id.toString()}
-      renderItem={({ item }) => <CategoriesListItem item={item} />}
-      numColumns={2}
-    />
+    <View style={styles.list}>
+      {categories.map((category) => (
+        <CategoriesListItem key={category.id} item={category} />
+      ))}
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   list: {
-    flex: 1,
+    flexDirection: "row",
+    flexWrap: "wrap",
   },
 });
 
