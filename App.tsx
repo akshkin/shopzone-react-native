@@ -6,6 +6,9 @@ import Home from "./screens/Home";
 import Category from "./screens/Category";
 import ProductDetail from "./screens/ProductDetail";
 import Auth from "./screens/Auth";
+import { Ionicons } from "@expo/vector-icons";
+import { Avatar } from "@rneui/base/dist/Avatar/Avatar";
+import IconButton from "./components/IconButton";
 
 export type RootStackParamList = {
   Home: undefined;
@@ -26,7 +29,30 @@ export default function App() {
       <StatusBar style="auto" />
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen name="Home" component={Home} />
+          <Stack.Screen
+            name="Home"
+            component={Home}
+            options={({ navigation }) => ({
+              headerRight: () => (
+                // <Avatar
+                //   size={32}
+                //   rounded
+                //   icon={{ name: "person", type: "font-awesome" }}
+                //   containerStyle={{ backgroundColor: "#9700b9" }}
+                //   onPress={() => navigation.navigate("SignIn")}
+                // />
+                // <Ionicons
+                //   name="person-circle-outline"
+                //   size={30}
+                //   color="black"
+                // />
+                <IconButton
+                  icon="person-circle-outline"
+                  onPress={() => navigation.navigate("SignIn")}
+                />
+              ),
+            })}
+          />
           <Stack.Screen name="Category" component={Category} />
           <Stack.Screen name="ProductDetail" component={ProductDetail} />
           <Stack.Screen

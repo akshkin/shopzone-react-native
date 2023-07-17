@@ -3,6 +3,7 @@ import { Image, View, Text, StyleSheet, Pressable } from "react-native";
 import { ProductType } from "../types";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import IconButton from "./IconButton";
 
 type ProductProps = {
   product: ProductType;
@@ -22,20 +23,32 @@ function ProductCard({ product }: ProductProps) {
     navigation.navigate("ProductDetail", { productId: product._id });
   }
 
+  function handleIconPress() {}
+
   return (
     <View style={styles.container}>
-      <Ionicons
+      <IconButton
+        icon="heart-outline"
+        onPress={handleIconPress}
+        style={styles.heartIcon}
+      />
+      <IconButton
+        icon="ios-cart-outline"
+        onPress={handleIconPress}
+        style={styles.cartIcon}
+      />
+      {/* <Ionicons
         style={styles.heartIcon}
         name="heart-outline"
         size={28}
         color="black"
-      />
-      <Ionicons
+      /> */}
+      {/* <Ionicons
         style={styles.cartIcon}
         name="ios-cart-outline"
         size={28}
         color="black"
-      />
+      /> */}
       <Pressable
         onPress={handlePress}
         style={({ pressed }) => (pressed ? { opacity: 0.5 } : {})}
