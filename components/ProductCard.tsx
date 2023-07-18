@@ -4,6 +4,8 @@ import { ProductType } from "../types";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import IconButton from "./IconButton";
+import { useAppSelector } from "../hooks/useAppDispatch";
+import { selectFavorites } from "../features/favorites";
 
 type ProductProps = {
   product: ProductType;
@@ -12,6 +14,11 @@ type ProductProps = {
 function ProductCard({ product }: ProductProps) {
   const navigation = useNavigation();
   const { title, rating, image, price } = product;
+  const favorites = useAppSelector(selectFavorites);
+
+  const isFavorite = favorites.find(
+    (favorite) => favorite.productId === product._id
+  );
 
   {
     /* <Ionicons name="ios-heart" size={24} color="black" />
@@ -28,8 +35,9 @@ function ProductCard({ product }: ProductProps) {
   return (
     <View style={styles.container}>
       <IconButton
-        icon="heart-outline"
+        icon={isFavorite ? "ios-heart" : "heart-outline"}
         onPress={handleIconPress}
+        color="red"
         style={styles.heartIcon}
       />
       <IconButton

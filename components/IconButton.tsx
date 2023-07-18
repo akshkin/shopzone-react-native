@@ -4,7 +4,7 @@ import { Ionicons } from "@expo/vector-icons";
 
 type IconButtonProps = {
   icon: keyof typeof Ionicons.glyphMap;
-  color?: "#006d77";
+  color?: "#006d77" | string;
   style?: any;
   onPress: () => void;
 };
