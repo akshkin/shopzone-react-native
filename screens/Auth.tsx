@@ -1,11 +1,11 @@
+import React, { useState } from "react";
 import { Input, Text } from "@rneui/base";
 import { Button } from "@rneui/themed";
-import React, { useState } from "react";
 import { View, StyleSheet, Pressable, ScrollView } from "react-native";
-import { signIn } from "../api";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../App";
+import { useAppDispatch, useAppSelector } from "../hooks/useAppDispatch";
+import { authError, authLoading, signInUser } from "../features/auth";
 
 type AuthScreenProps = NativeStackScreenProps<RootStackParamList>;
 
@@ -16,25 +16,21 @@ function Auth({ navigation }: AuthScreenProps) {
     email: "",
     password: "",
   });
-  const [token, setToken] = useState("");
-  const [loading, setLoading] = useState(false);
+  const error = useAppSelector(authError);
+  const loading = useAppSelector(authLoading);
+  const dispatch = useAppDispatch();
 
   function handleChange(name: string, value: string) {
     setFormFields((prevFormFields) => ({ ...prevFormFields, [name]: value }));
   }
 
   async function handleSubmit() {
-    console.log(formFields);
-    setLoading(true);
     try {
-      const response = await signIn(formFields);
-      console.log(response.data.token);
-      await AsyncStorage.setItem("token", response.data.token);
+      dispatch(signInUser(formFields));
       navigation.navigate("Home");
     } catch (error) {
       console.log(error);
     }
-    setLoading(false);
   }
 
   return (
@@ -97,6 +93,7 @@ function Auth({ navigation }: AuthScreenProps) {
           </Text>
         </Pressable>
       </View>
+      {error && <Text>{error}</Text>}
     </ScrollView>
   );
 }
@@ -117,7 +114,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   button: {
-    backgroundColor: "rgb(0, 109, 119)",
+    backgroundColor: "#006d77",
     paddingVertical: 16,
   },
   changeLogin: {

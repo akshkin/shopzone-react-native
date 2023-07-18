@@ -37,18 +37,7 @@ function ProductCard({ product }: ProductProps) {
         onPress={handleIconPress}
         style={styles.cartIcon}
       />
-      {/* <Ionicons
-        style={styles.heartIcon}
-        name="heart-outline"
-        size={28}
-        color="black"
-      /> */}
-      {/* <Ionicons
-        style={styles.cartIcon}
-        name="ios-cart-outline"
-        size={28}
-        color="black"
-      /> */}
+
       <Pressable
         onPress={handlePress}
         style={({ pressed }) => (pressed ? { opacity: 0.5 } : {})}

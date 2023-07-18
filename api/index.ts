@@ -4,7 +4,7 @@ export const API = axios.create({
   baseURL: "https://shopzone-server.onrender.com",
 });
 
-type FormFields = {
+export type FormFields = {
   name?: string;
   email: string;
   password: string;
