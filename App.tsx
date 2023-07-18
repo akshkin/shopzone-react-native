@@ -24,7 +24,7 @@ export type RootStackParamList = {
       }
     | undefined;
   ProductDetail: undefined | { productId: string };
-  SignIn: undefined;
+  SignIn: undefined | { message: string };
   Favorites: undefined;
 };
 
