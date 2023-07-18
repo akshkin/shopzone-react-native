@@ -15,6 +15,7 @@ import * as SplashScreen from "expo-splash-screen";
 import * as SecureStore from "expo-secure-store";
 import { authToken, signOutUser } from "./features/auth";
 import Favorites from "./screens/Favorites";
+import Cart from "./screens/Cart";
 
 export type RootStackParamList = {
   Home: undefined;
@@ -26,6 +27,7 @@ export type RootStackParamList = {
   ProductDetail: undefined | { productId: string };
   SignIn: undefined | { message: string };
   Favorites: undefined;
+  Cart: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -100,7 +102,10 @@ function Root() {
                         onPress={() => navigation.navigate("Favorites")}
                         style={styles.icon}
                       />
-                      <IconButton icon="cart-outline" onPress={() => {}} />
+                      <IconButton
+                        icon="cart-outline"
+                        onPress={() => navigation.navigate("Cart")}
+                      />
                     </>
                   )}
                 </>
@@ -110,6 +115,7 @@ function Root() {
           <Stack.Screen name="Category" component={Category} />
           <Stack.Screen name="ProductDetail" component={ProductDetail} />
           <Stack.Screen name="Favorites" component={Favorites} />
+          <Stack.Screen name="Cart" component={Cart} />
           <Stack.Screen
             name="SignIn"
             component={Auth}
