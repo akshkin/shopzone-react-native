@@ -1,22 +1,19 @@
 import { useCallback, useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
 import Home from "./screens/Home";
 import Category from "./screens/Category";
 import ProductDetail from "./screens/ProductDetail";
 import Auth from "./screens/Auth";
-import { Ionicons } from "@expo/vector-icons";
-import { Avatar } from "@rneui/base/dist/Avatar/Avatar";
 import IconButton from "./components/IconButton";
 import { Provider } from "react-redux";
 import { store } from "./store";
-import { useAppSelector } from "./hooks/useAppDispatch";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useAppDispatch, useAppSelector } from "./hooks/useAppDispatch";
 import * as SplashScreen from "expo-splash-screen";
 import * as SecureStore from "expo-secure-store";
-import { authToken } from "./features/auth";
+import { authToken, signOutUser } from "./features/auth";
 
 export type RootStackParamList = {
   Home: undefined;
@@ -34,21 +31,26 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 function Root() {
   const [authenticated, setAuthenticated] = useState(false);
   const [isAppReady, setIsAppReady] = useState(false);
-  const newToken = useAppSelector(authToken);
+  const token = useAppSelector(authToken);
+  const [isOpen, setIsOpen] = useState(false);
+  const dispatch = useAppDispatch();
+
+  const signOut = () => {
+    dispatch(signOutUser());
+    setAuthenticated(false);
+    setIsOpen(false);
+  };
 
   useEffect(() => {
     async function getToken() {
-      // const token = await AsyncStorage.getItem("token");
-      const token = await SecureStore.getItemAsync("token");
-      console.log(token);
-
-      if (token) {
+      const tokenFromStorage = await SecureStore.getItemAsync("token");
+      if (tokenFromStorage) {
         setAuthenticated(true);
       }
       setIsAppReady(true);
     }
     getToken();
-  }, []);
+  }, [token]);
 
   const onLayoutRootView = useCallback(async () => {
     if (isAppReady) {
@@ -70,9 +72,25 @@ function Root() {
                 <>
                   <IconButton
                     icon="person-circle-outline"
-                    onPress={() => navigation.navigate("SignIn")}
+                    onPress={
+                      authenticated
+                        ? () => setIsOpen((prevOpen) => !prevOpen)
+                        : () => navigation.navigate("SignIn")
+                    }
                     style={styles.icon}
                   />
+                  {isOpen && (
+                    <Pressable
+                      onPress={signOut}
+                      style={({ pressed }) =>
+                        pressed
+                          ? [styles.pressed, styles.signOutContainer]
+                          : styles.signOutContainer
+                      }
+                    >
+                      <Text>Sign out</Text>
+                    </Pressable>
+                  )}
                   {authenticated && (
                     <>
                       <IconButton
@@ -118,5 +136,18 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginRight: 8,
+  },
+  signOutContainer: {
+    position: "absolute",
+    top: 15,
+    backgroundColor: "white",
+    borderWidth: 1,
+    padding: 4,
+    margin: 4,
+    zIndex: 20,
+    borderRadius: 8,
+  },
+  pressed: {
+    opacity: 0.6,
   },
 });
