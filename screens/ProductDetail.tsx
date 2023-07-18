@@ -1,18 +1,16 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React, { useEffect, useState } from "react";
-import {
-  Button,
-  Image,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import { RootStackParamList } from "../App";
 import { ProductType } from "../types";
 import { fetchProductDetails } from "../api";
 import { Ionicons } from "@expo/vector-icons";
 import LoadingOverlay from "../components/LoadingOverlay";
+import Button from "../components/Button";
+import { useAppDispatch } from "../hooks/useAppDispatch";
+import { addProductToCart } from "../features/cart";
+import * as SecureStore from "expo-secure-store";
+import { addProductToFavorites } from "../features/favorites";
 
 type ProductDetailProps = NativeStackScreenProps<
   RootStackParamList,
@@ -23,6 +21,7 @@ function ProductDetail({ route, navigation }: ProductDetailProps) {
   const [product, setProduct] = useState<ProductType>();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const dispatch = useAppDispatch();
 
   const productId = route.params?.productId;
 
@@ -48,6 +47,19 @@ function ProductDetail({ route, navigation }: ProductDetailProps) {
     });
   }, [product]);
 
+  function addToCart(item: ProductType) {
+    dispatch(addProductToCart({ cartItem: item }));
+  }
+
+  async function toggleFavorites() {
+    const token = await SecureStore.getItemAsync("token");
+    if (token && product) {
+      dispatch(addProductToFavorites({ item: product }));
+    } else {
+      navigation.navigate("SignIn", { message: "You must log in first" });
+    }
+  }
+
   if (!productId) return <></>;
 
   if (loading) return <LoadingOverlay />;
@@ -65,8 +77,16 @@ function ProductDetail({ route, navigation }: ProductDetailProps) {
           {product?.rating.count})
         </Text>
         <View style={styles.buttonsContainer}>
-          <Button title="Favorite" color="black" />
-          <Button title="Add to Cart" />
+          <Button color="#83c5be" onPress={toggleFavorites}>
+            Favorite
+          </Button>
+          <Button
+            textColor="white"
+            color="#006d77"
+            onPress={() => product && addToCart(product)}
+          >
+            Add to Cart
+          </Button>
         </View>
         <Text style={styles.price}>SEK {product?.price}</Text>
         <Text>{product?.description}</Text>

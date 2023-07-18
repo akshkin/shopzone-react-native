@@ -1,13 +1,12 @@
 import React from "react";
 import { Image, View, Text, StyleSheet, Pressable } from "react-native";
 import { ProductType } from "../types";
-import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import IconButton from "./IconButton";
 import { useAppDispatch, useAppSelector } from "../hooks/useAppDispatch";
 import { addProductToFavorites, selectFavorites } from "../features/favorites";
-import { authToken } from "../features/auth";
 import * as SecureStore from "expo-secure-store";
+import { addProductToCart } from "../features/cart";
 
 type ProductProps = {
   product: ProductType;
@@ -17,9 +16,7 @@ function ProductCard({ product }: ProductProps) {
   const navigation = useNavigation();
   const { title, rating, image, price } = product;
   const favorites = useAppSelector(selectFavorites);
-  const token = useAppSelector(authToken);
   const dispatch = useAppDispatch();
-  console.log(token);
 
   const isFavorite = favorites.find(
     (favorite) => favorite.productId === product._id
@@ -40,11 +37,13 @@ function ProductCard({ product }: ProductProps) {
     }
   }
 
+  function addItemToCart(item: ProductType) {
+    dispatch(addProductToCart({ cartItem: item }));
+  }
+
   function handlePress() {
     navigation.navigate("ProductDetail", { productId: product._id });
   }
-
-  function handleIconPress() {}
 
   return (
     <View style={styles.container}>
@@ -56,7 +55,7 @@ function ProductCard({ product }: ProductProps) {
       />
       <IconButton
         icon="ios-cart-outline"
-        onPress={handleIconPress}
+        onPress={() => addItemToCart(product)}
         style={styles.cartIcon}
       />
 
