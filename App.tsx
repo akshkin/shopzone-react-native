@@ -14,6 +14,7 @@ import { useAppDispatch, useAppSelector } from "./hooks/useAppDispatch";
 import * as SplashScreen from "expo-splash-screen";
 import * as SecureStore from "expo-secure-store";
 import { authToken, signOutUser } from "./features/auth";
+import Favorites from "./screens/Favorites";
 
 export type RootStackParamList = {
   Home: undefined;
@@ -24,6 +25,7 @@ export type RootStackParamList = {
     | undefined;
   ProductDetail: undefined | { productId: string };
   SignIn: undefined;
+  Favorites: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -95,7 +97,7 @@ function Root() {
                     <>
                       <IconButton
                         icon="heart-outline"
-                        onPress={() => {}}
+                        onPress={() => navigation.navigate("Favorites")}
                         style={styles.icon}
                       />
                       <IconButton icon="cart-outline" onPress={() => {}} />
@@ -107,6 +109,7 @@ function Root() {
           />
           <Stack.Screen name="Category" component={Category} />
           <Stack.Screen name="ProductDetail" component={ProductDetail} />
+          <Stack.Screen name="Favorites" component={Favorites} />
           <Stack.Screen
             name="SignIn"
             component={Auth}
