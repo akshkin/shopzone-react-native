@@ -20,6 +20,9 @@ export type FormFields = {
   password: string;
 };
 
+export const fetchProductsBySearch = (searchQuery: string) =>
+  API.get(`/products/search?searchQuery=${searchQuery}`);
+
 export const signIn = (formFields: FormFields) =>
   API.post(`/users/signin`, formFields);
 

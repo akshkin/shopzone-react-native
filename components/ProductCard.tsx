@@ -78,6 +78,8 @@ const styles = StyleSheet.create({
   container: {
     width: "45%",
     marginHorizontal: 10,
+    backgroundColor: "#fff",
+    padding: 4,
   },
   image: {
     width: "100%",

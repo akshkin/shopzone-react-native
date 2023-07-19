@@ -16,6 +16,7 @@ import * as SecureStore from "expo-secure-store";
 import { authToken, signOutUser } from "./features/auth";
 import Favorites from "./screens/Favorites";
 import Cart from "./screens/Cart";
+import Search from "./screens/Search";
 
 export type RootStackParamList = {
   Home: undefined;
@@ -28,6 +29,7 @@ export type RootStackParamList = {
   SignIn: undefined | { message: string };
   Favorites: undefined;
   Cart: undefined;
+  Search: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -75,6 +77,11 @@ function Root() {
               headerRight: () => (
                 <>
                   <IconButton
+                    icon="search-outline"
+                    style={styles.icon}
+                    onPress={() => navigation.navigate("Search")}
+                  />
+                  <IconButton
                     icon="person-circle-outline"
                     onPress={
                       authenticated
@@ -116,6 +123,11 @@ function Root() {
           <Stack.Screen name="ProductDetail" component={ProductDetail} />
           <Stack.Screen name="Favorites" component={Favorites} />
           <Stack.Screen name="Cart" component={Cart} />
+          <Stack.Screen
+            name="Search"
+            component={Search}
+            options={{ title: "Search Products" }}
+          />
           <Stack.Screen
             name="SignIn"
             component={Auth}
