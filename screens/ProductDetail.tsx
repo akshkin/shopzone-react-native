@@ -67,31 +67,33 @@ function ProductDetail({ route, navigation }: ProductDetailProps) {
   if (error) return <Text>{error}</Text>;
 
   return (
-    <ScrollView>
-      <Image style={styles.image} source={{ uri: product?.image }} />
-      <View style={styles.detailsContainer}>
-        <Text style={styles.title}>{product?.title}</Text>
-        <Text style={styles.rating}>
-          {product?.rating.rate}{" "}
-          <Ionicons name="star" size={18} color="black" /> (
-          {product?.rating.count})
-        </Text>
-        <View style={styles.buttonsContainer}>
-          <Button color="#83c5be" onPress={toggleFavorites}>
-            Favorite
-          </Button>
-          <Button
-            textColor="white"
-            color="#006d77"
-            onPress={() => product && addToCart(product)}
-          >
-            Add to Cart
-          </Button>
+    <>
+      <ScrollView>
+        <Image style={styles.image} source={{ uri: product?.image }} />
+        <View style={styles.detailsContainer}>
+          <Text style={styles.title}>{product?.title}</Text>
+          <Text style={styles.rating}>
+            {product?.rating.rate}{" "}
+            <Ionicons name="star" size={18} color="black" /> (
+            {product?.rating.count})
+          </Text>
+          <Text style={styles.price}>SEK {product?.price}</Text>
+          <Text>{product?.description}</Text>
         </View>
-        <Text style={styles.price}>SEK {product?.price}</Text>
-        <Text>{product?.description}</Text>
+      </ScrollView>
+      <View style={styles.buttonsContainer}>
+        <Button color="#83c5be" onPress={toggleFavorites}>
+          Favorite
+        </Button>
+        <Button
+          textColor="white"
+          color="#006d77"
+          onPress={() => product && addToCart(product)}
+        >
+          Add to Cart
+        </Button>
       </View>
-    </ScrollView>
+    </>
   );
 }
 
@@ -120,6 +122,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     flexDirection: "row",
     gap: 8,
+    justifyContent: "center",
   },
 });
 
