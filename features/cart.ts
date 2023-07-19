@@ -30,7 +30,6 @@ export const addProductToCart = createAsyncThunk(
       const response = await addToCart({
         cartItem: cartItem,
       });
-      console.log(response);
       return response.data;
     } catch (error: any) {
       console.log(error);
@@ -44,7 +43,6 @@ export const removeProductFromCart = createAsyncThunk(
   async ({ id }: { id: string }) => {
     try {
       const response = await removeFromCart({ id });
-      console.log(response);
       return response.data;
     } catch (error: any) {
       console.log(error);
@@ -57,7 +55,6 @@ export const clearProductFromCart = createAsyncThunk(
   async ({ id }: { id: string }) => {
     try {
       const response = await clearCartItem({ id });
-      console.log(response);
       return response.data;
     } catch (error: any) {
       return error.response.data;
@@ -68,7 +65,6 @@ export const clearProductFromCart = createAsyncThunk(
 export const getCartProducts = createAsyncThunk("/cart/get", async () => {
   try {
     const response = await getCart();
-    console.log(response.data);
     return response.data;
   } catch (error: any) {
     return error.response.data;

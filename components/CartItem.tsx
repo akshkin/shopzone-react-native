@@ -1,5 +1,5 @@
 import React from "react";
-import { Alert, Image, StyleSheet, Text, View } from "react-native";
+import { Alert, Image, Pressable, StyleSheet, Text, View } from "react-native";
 import {
   CartItemType,
   addProductToCart,
@@ -9,9 +9,11 @@ import {
 import IconButton from "./IconButton";
 import { ProductType } from "../types";
 import { useAppDispatch } from "../hooks/useAppDispatch";
+import { useNavigation } from "@react-navigation/native";
 
 function CartItem({ cartItem }: { cartItem: CartItemType }) {
   const dispatch = useAppDispatch();
+  const navigation = useNavigation();
   const { product, quantity, totalPrice } = cartItem;
 
   function addItemToCart(product: ProductType) {
@@ -25,12 +27,18 @@ function CartItem({ cartItem }: { cartItem: CartItemType }) {
     dispatch(clearProductFromCart({ id }));
   }
 
-  function handlePress() {}
   return (
     <View style={styles.container}>
       <Image style={styles.image} source={{ uri: product.image }} />
       <View style={styles.innerContainer}>
-        <Text style={styles.title}>{product.title}</Text>
+        <Pressable
+          style={({ pressed }) => pressed && styles.pressed}
+          onPress={() =>
+            navigation.navigate("ProductDetail", { productId: product._id })
+          }
+        >
+          <Text style={styles.title}>{product.title}</Text>
+        </Pressable>
         <Text style={styles.price}>SEK {product.price}</Text>
         <View style={styles.buttonContainer}>
           <IconButton
@@ -88,5 +96,8 @@ const styles = StyleSheet.create({
   },
   price: {
     fontSize: 18,
+  },
+  pressed: {
+    opacity: 0.5,
   },
 });
