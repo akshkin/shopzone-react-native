@@ -10,6 +10,8 @@ import {
 import CartItem from "../components/CartItem";
 import LoadingOverlay from "../components/LoadingOverlay";
 import Button from "../components/Button";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import * as SecureStore from "expo-secure-store";
 
 function Cart() {
   const cartItems = useAppSelector(selectCartItems);
@@ -23,26 +25,44 @@ function Cart() {
   );
 
   useEffect(() => {
-    dispatch(getCartProducts());
+    async function getCart() {
+      const token = await SecureStore.getItemAsync("token");
+      if (token) {
+        dispatch(getCartProducts());
+      }
+    }
+    getCart();
   }, []);
 
   if (loading) return <LoadingOverlay />;
 
   return (
     <>
-      {!cartItems.length && <Text>Your Cart is empty</Text>}
-      <FlatList
-        data={cartItems}
-        keyExtractor={(product) => product.productId}
-        renderItem={({ item }) => <CartItem cartItem={item} />}
-      />
-      <View style={styles.priceDetails}>
-        <Text style={styles.text}>Price details ({numOfItems} items)</Text>
-        <Text style={styles.amount}>Total amount: SEK {totalPrice}</Text>
-        <Button textColor="#fff" color="#006d77" onPress={() => {}}>
-          Place order
-        </Button>
-      </View>
+      {!cartItems.length ? (
+        <View style={styles.emptyCart}>
+          <Text style={styles.text}>Your Cart is empty</Text>
+          <MaterialCommunityIcons
+            name="cart-variant"
+            size={150}
+            color="#3cabab"
+          />
+        </View>
+      ) : (
+        <>
+          <FlatList
+            data={cartItems}
+            keyExtractor={(product) => product.productId}
+            renderItem={({ item }) => <CartItem cartItem={item} />}
+          />
+          <View style={styles.priceDetails}>
+            <Text style={styles.text}>Price details ({numOfItems} items)</Text>
+            <Text style={styles.amount}>Total amount: SEK {totalPrice}</Text>
+            <Button textColor="#fff" color="#006d77" onPress={() => {}}>
+              Place order
+            </Button>
+          </View>
+        </>
+      )}
     </>
   );
 }
@@ -66,5 +86,10 @@ const styles = StyleSheet.create({
   },
   amount: {
     fontSize: 16,
+  },
+  emptyCart: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 50,
   },
 });

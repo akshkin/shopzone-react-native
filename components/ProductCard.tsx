@@ -37,8 +37,17 @@ function ProductCard({ product }: ProductProps) {
     }
   }
 
-  function addItemToCart(item: ProductType) {
-    dispatch(addProductToCart({ cartItem: item }));
+  async function addItemToCart(item: ProductType) {
+    const token = await SecureStore.getItemAsync("token");
+    if (token) {
+      dispatch(addProductToCart({ cartItem: item }));
+    } else {
+      // dispatch(addToCartNoUser(item));
+      navigation.navigate("SignIn", {
+        message:
+          "We are working on the functionality of adding products to cart without logging in. Thank you for your patience.",
+      });
+    }
   }
 
   function handlePress() {

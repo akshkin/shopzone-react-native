@@ -75,42 +75,67 @@ const cartSlice = createSlice({
   name: "cartItems",
   initialState,
   reducers: {
-    addToCartNoUser(state, action) {
-      console.log(action.payload);
-      console.log(state.cartItems);
-      state.cartItems.push(action.payload);
-      // state.cartItems.map((item) => {
-      //   console.log(item);
-      //   console.log("Adding");
-      //   if (item === action.payload) {
-      //     return (state.cartItems = [
-      //       ...state.cartItems,
-      //       {
-      //         ...item,
-      //         quantity: item.quantity + 1,
-      //         totalPrice: item.price * item.quantity,
-      //       },
-      //     ]);
-      //   }
-      //   console.log("adding to cart");
-      //   return (state.cartItems = [
-      //     ...state.cartItems,
-      //     { ...action.payload, quantity: 1 },
-      //   ]);
-      // });
-    },
-    removeFromCartNoUser(state, action) {
-      state.cartItems.map((item) => {
-        if (item.quantity > 1) {
-          return (state.cartItems = [
-            ...state.cartItems,
-            { ...action.payload, quantity: item.quantity - 1 },
-          ]);
-        }
-        return state.cartItems.filter(
-          (item) => item.product._id !== action.payload
-        );
-      });
+    // addToCartNoUser(state, action) {
+    //   const cartItem: ProductType = action.payload;
+
+    //   const existingItemInCart = state.cartItems.find(
+    //     (item) => item.productId === cartItem._id
+    //   );
+
+    //   if (existingItemInCart && existingItemInCart.quantity) {
+    //     return {
+    //       ...state,
+    //       cartItems: state.cartItems.map((item) =>
+    //         typeof item.quantity !== "undefined" &&
+    //         item.productId === cartItem._id
+    //           ? { ...item, productId: cartItem._id, quantity: item.quantity + 1, totalPrice: cartItem.price * cartItem.quantity! }
+    //           : item
+    //       ),
+    //     };
+    //   }
+
+    //   return {
+    //     ...state,
+    //     cartItems: [...state.cartItems, { ...cartItem, productId: cartItem._id, quantity: 1, totalPrice: cartItem.price }],
+    //   };
+    // },
+
+    // removeFromCartNoUser(state, action) {
+    //   const id = action.payload;
+
+    //   const itemInCart = state.cartItems.find((item) => item.productId === id);
+
+    //   if (itemInCart?.quantity === 1) {
+    //     return {
+    //       ...state,
+    //       cartItems: state.cartItems.filter((cartItem) => cartItem.productId !== id),
+    //     };
+    //   } else {
+    //     return {
+    //       ...state,
+    //       cartItems: state.cartItems.map((cartItem) =>
+    //         cartItem.productId === id
+    //           ? { ...cartItem, productId: id , quantity: cartItem.quantity! - 1, totalPrice: cartItem.quantity * cartItem.product.price }
+    //           : cartItem
+    //       ),
+    //     };
+    //   }
+    // },
+
+    // clearFromCartNoUser(state, action) {
+    //   const id = action.payload;
+    //   return {
+    //     ...state,
+    //     cartItems: state.cartItems.filter(
+    //       (cartItem) => cartItem.productId !== id
+    //     ),
+    //   };
+
+    // },
+
+    clearCartItems(state) {
+      console.log("clearing...");
+      state.cartItems = [];
     },
   },
   extraReducers(builder) {
@@ -178,7 +203,8 @@ export const selectCartItems = (state: RootState) => state.cartItems.cartItems;
 export const selectTotalPrice = (state: RootState) =>
   state.cartItems.totalPrice;
 export const cartLoading = (state: RootState) => state.cartItems.loading;
+export const { clearCartItems } = cartSlice.actions;
 
-export const { addToCartNoUser, removeFromCartNoUser } = cartSlice.actions;
+// export const { addToCartNoUser, removeFromCartNoUser } = cartSlice.actions;
 
 export default cartSlice.reducer;

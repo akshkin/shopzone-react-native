@@ -25,7 +25,6 @@ export const addProductToFavorites = createAsyncThunk(
   async ({ item }: { item: ProductType }) => {
     try {
       const response = await addToFavorites({ item });
-      console.log(response.data);
       return response.data;
     } catch (error: any) {
       console.log(error);
@@ -38,7 +37,6 @@ export const getProductFavorites = createAsyncThunk(
   async () => {
     try {
       const response = await getFavorites();
-      console.log(response.data);
       return response.data;
     } catch (error: any) {
       console.log(error);

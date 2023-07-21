@@ -30,8 +30,8 @@ export default Button;
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 12,
-    paddingVertical: 6,
-    width: "47%",
+    paddingVertical: 10,
+    // width: "47%",
     alignItems: "center",
   },
   pressed: {

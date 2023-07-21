@@ -7,7 +7,6 @@ function Home() {
   return (
     <ScrollView>
       <Image resizeMode="cover" style={styles.heroImage} source={heroImg} />
-
       <CategoriesList />
     </ScrollView>
   );

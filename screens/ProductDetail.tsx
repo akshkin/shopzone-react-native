@@ -7,10 +7,11 @@ import { fetchProductDetails } from "../api";
 import { Ionicons } from "@expo/vector-icons";
 import LoadingOverlay from "../components/LoadingOverlay";
 import Button from "../components/Button";
-import { useAppDispatch } from "../hooks/useAppDispatch";
+import { useAppDispatch, useAppSelector } from "../hooks/useAppDispatch";
 import { addProductToCart } from "../features/cart";
 import * as SecureStore from "expo-secure-store";
-import { addProductToFavorites } from "../features/favorites";
+import { addProductToFavorites, selectFavorites } from "../features/favorites";
+import IconButton from "../components/IconButton";
 
 type ProductDetailProps = NativeStackScreenProps<
   RootStackParamList,
@@ -22,6 +23,11 @@ function ProductDetail({ route, navigation }: ProductDetailProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const dispatch = useAppDispatch();
+  const favorites = useAppSelector(selectFavorites);
+
+  const isFavorite = favorites.find(
+    (favorite) => favorite.productId === product?._id
+  );
 
   const productId = route.params?.productId;
 
@@ -47,8 +53,16 @@ function ProductDetail({ route, navigation }: ProductDetailProps) {
     });
   }, [product]);
 
-  function addToCart(item: ProductType) {
-    dispatch(addProductToCart({ cartItem: item }));
+  async function addToCart(item: ProductType) {
+    const token = await SecureStore.getItemAsync("token");
+    if (token) {
+      dispatch(addProductToCart({ cartItem: item }));
+    } else {
+      navigation.navigate("SignIn", {
+        message:
+          "We are working on the functionality of adding products to cart without logging in. Thank you for your patience.",
+      });
+    }
   }
 
   async function toggleFavorites() {
@@ -70,6 +84,12 @@ function ProductDetail({ route, navigation }: ProductDetailProps) {
     <>
       <ScrollView>
         <Image style={styles.image} source={{ uri: product?.image }} />
+        <IconButton
+          icon={isFavorite ? "ios-heart" : "heart-outline"}
+          onPress={toggleFavorites}
+          color="red"
+          style={styles.heartIcon}
+        />
         <View style={styles.detailsContainer}>
           <Text style={styles.title}>{product?.title}</Text>
           <Text style={styles.rating}>
@@ -82,9 +102,6 @@ function ProductDetail({ route, navigation }: ProductDetailProps) {
         </View>
       </ScrollView>
       <View style={styles.buttonsContainer}>
-        <Button color="#83c5be" onPress={toggleFavorites}>
-          Favorite
-        </Button>
         <Button
           textColor="white"
           color="#006d77"
@@ -119,10 +136,16 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   buttonsContainer: {
-    marginVertical: 10,
-    flexDirection: "row",
-    gap: 8,
-    justifyContent: "center",
+    margin: 10,
+  },
+  heartIcon: {
+    position: "absolute",
+    zIndex: 10,
+    right: 10,
+    top: 12,
+    backgroundColor: "white",
+    borderRadius: 40,
+    padding: 4,
   },
 });
 

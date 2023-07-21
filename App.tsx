@@ -17,6 +17,7 @@ import { authToken, signOutUser } from "./features/auth";
 import Favorites from "./screens/Favorites";
 import Cart from "./screens/Cart";
 import Search from "./screens/Search";
+import { clearCartItems } from "./features/cart";
 
 export type RootStackParamList = {
   Home: undefined;
@@ -45,6 +46,7 @@ function Root() {
     dispatch(signOutUser());
     setAuthenticated(false);
     setIsOpen(false);
+    dispatch(clearCartItems());
   };
 
   useEffect(() => {
@@ -90,6 +92,11 @@ function Root() {
                     }
                     style={styles.icon}
                   />
+                  <IconButton
+                    icon="cart-outline"
+                    style={styles.icon}
+                    onPress={() => navigation.navigate("Cart")}
+                  />
                   {isOpen && (
                     <Pressable
                       onPress={signOut}
@@ -109,10 +116,10 @@ function Root() {
                         onPress={() => navigation.navigate("Favorites")}
                         style={styles.icon}
                       />
-                      <IconButton
+                      {/* <IconButton
                         icon="cart-outline"
                         onPress={() => navigation.navigate("Cart")}
-                      />
+                      /> */}
                     </>
                   )}
                 </>
@@ -121,7 +128,18 @@ function Root() {
           />
           <Stack.Screen name="Category" component={Category} />
           <Stack.Screen name="ProductDetail" component={ProductDetail} />
-          <Stack.Screen name="Favorites" component={Favorites} />
+          <Stack.Screen
+            name="Favorites"
+            component={Favorites}
+            options={({ navigation }) => ({
+              headerRight: () => (
+                <IconButton
+                  icon="cart-outline"
+                  onPress={() => navigation.navigate("Cart")}
+                />
+              ),
+            })}
+          />
           <Stack.Screen name="Cart" component={Cart} />
           <Stack.Screen
             name="Search"
