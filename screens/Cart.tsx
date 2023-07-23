@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import { Alert, FlatList, StyleSheet, Text, View } from "react-native";
 import { useAppDispatch, useAppSelector } from "../hooks/useAppDispatch";
 import {
   cartLoading,
+  clearCartItems,
   getCartProducts,
   selectCartItems,
   selectTotalPrice,
@@ -12,8 +13,15 @@ import LoadingOverlay from "../components/LoadingOverlay";
 import Button from "../components/Button";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as SecureStore from "expo-secure-store";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../App";
 
-function Cart() {
+type CartScreenNavigationProps = NativeStackScreenProps<
+  RootStackParamList,
+  "Cart"
+>;
+
+function Cart({ navigation }: CartScreenNavigationProps) {
   const cartItems = useAppSelector(selectCartItems);
   const loading = useAppSelector(cartLoading);
   const totalPrice = useAppSelector(selectTotalPrice);
@@ -33,6 +41,22 @@ function Cart() {
     }
     getCart();
   }, []);
+
+  function placeOrder() {
+    Alert.alert("Place order ?", "Proceed with payment ?", [
+      {
+        text: "Confirm",
+        onPress: () => {
+          navigation.navigate("Order");
+          dispatch(clearCartItems());
+        },
+      },
+      {
+        text: "Cancel",
+        style: "cancel",
+      },
+    ]);
+  }
 
   if (loading) return <LoadingOverlay />;
 
@@ -57,7 +81,7 @@ function Cart() {
           <View style={styles.priceDetails}>
             <Text style={styles.text}>Price details ({numOfItems} items)</Text>
             <Text style={styles.amount}>Total amount: SEK {totalPrice}</Text>
-            <Button textColor="#fff" color="#006d77" onPress={() => {}}>
+            <Button textColor="#fff" color="#006d77" onPress={placeOrder}>
               Place order
             </Button>
           </View>

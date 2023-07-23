@@ -17,7 +17,8 @@ import { authToken, signOutUser } from "./features/auth";
 import Favorites from "./screens/Favorites";
 import Cart from "./screens/Cart";
 import Search from "./screens/Search";
-import { clearCartItems } from "./features/cart";
+import { clearCartItems, clearCartItemsNoUser } from "./features/cart";
+import Order from "./screens/Order";
 
 export type RootStackParamList = {
   Home: undefined;
@@ -31,6 +32,7 @@ export type RootStackParamList = {
   Favorites: undefined;
   Cart: undefined;
   Search: undefined;
+  Order: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -46,7 +48,7 @@ function Root() {
     dispatch(signOutUser());
     setAuthenticated(false);
     setIsOpen(false);
-    dispatch(clearCartItems());
+    dispatch(clearCartItemsNoUser());
   };
 
   useEffect(() => {
@@ -71,60 +73,111 @@ function Root() {
   return (
     <View style={styles.container} onLayout={onLayoutRootView}>
       <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="Home"
-            component={Home}
-            options={({ navigation }) => ({
-              headerRight: () => (
-                <>
-                  <IconButton
-                    icon="search-outline"
-                    style={styles.icon}
-                    onPress={() => navigation.navigate("Search")}
-                  />
-                  <IconButton
-                    icon="person-circle-outline"
-                    onPress={
-                      authenticated
-                        ? () => setIsOpen((prevOpen) => !prevOpen)
-                        : () => navigation.navigate("SignIn")
+        <Stack.Navigator
+          screenOptions={({ navigation }) => ({
+            headerRight: () => (
+              <>
+                <IconButton
+                  icon="search-outline"
+                  style={styles.icon}
+                  onPress={() => navigation.navigate("Search")}
+                />
+                <IconButton
+                  icon="person-circle-outline"
+                  onPress={
+                    authenticated
+                      ? () => setIsOpen((prevOpen) => !prevOpen)
+                      : () => navigation.navigate("SignIn")
+                  }
+                  style={styles.icon}
+                />
+                <IconButton
+                  icon="cart-outline"
+                  style={styles.icon}
+                  onPress={() => navigation.navigate("Cart")}
+                />
+                {isOpen && (
+                  <Pressable
+                    onPress={signOut}
+                    style={({ pressed }) =>
+                      pressed
+                        ? [styles.pressed, styles.signOutContainer]
+                        : styles.signOutContainer
                     }
-                    style={styles.icon}
-                  />
-                  <IconButton
-                    icon="cart-outline"
-                    style={styles.icon}
-                    onPress={() => navigation.navigate("Cart")}
-                  />
-                  {isOpen && (
-                    <Pressable
-                      onPress={signOut}
-                      style={({ pressed }) =>
-                        pressed
-                          ? [styles.pressed, styles.signOutContainer]
-                          : styles.signOutContainer
-                      }
-                    >
-                      <Text>Sign out</Text>
-                    </Pressable>
-                  )}
-                  {authenticated && (
-                    <>
-                      <IconButton
-                        icon="heart-outline"
-                        onPress={() => navigation.navigate("Favorites")}
-                        style={styles.icon}
-                      />
-                      {/* <IconButton
+                  >
+                    <Text>Sign out</Text>
+                  </Pressable>
+                )}
+                {authenticated && (
+                  <>
+                    <IconButton
+                      icon="heart-outline"
+                      onPress={() => navigation.navigate("Favorites")}
+                      style={styles.icon}
+                    />
+                    {/* <IconButton
                         icon="cart-outline"
                         onPress={() => navigation.navigate("Cart")}
                       /> */}
-                    </>
-                  )}
-                </>
-              ),
-            })}
+                  </>
+                )}
+              </>
+            ),
+          })}
+        >
+          <Stack.Screen
+            name="Home"
+            component={Home}
+            // options={({ navigation }) => ({
+            // headerRight: () => (
+            //   <>
+            //     {/* <IconButton
+            //       icon="search-outline"
+            //       style={styles.icon}
+            //       onPress={() => navigation.navigate("Search")}
+            //     />
+            //     <IconButton
+            //       icon="person-circle-outline"
+            //       onPress={
+            //         authenticated
+            //           ? () => setIsOpen((prevOpen) => !prevOpen)
+            //           : () => navigation.navigate("SignIn")
+            //       }
+            //       style={styles.icon}
+            //     />
+            //     <IconButton
+            //       icon="cart-outline"
+            //       style={styles.icon}
+            //       onPress={() => navigation.navigate("Cart")}
+            //     /> */}
+            //     {/* {isOpen && (
+            //       <Pressable
+            //         onPress={signOut}
+            //         style={({ pressed }) =>
+            //           pressed
+            //             ? [styles.pressed, styles.signOutContainer]
+            //             : styles.signOutContainer
+            //         }
+            //       >
+            //         <Text>Sign out</Text>
+            //       </Pressable>
+            //     )} */}
+            //     {/* {authenticated && (
+            //       <>
+            //         <IconButton
+            //           icon="heart-outline"
+            //           onPress={() => navigation.navigate("Favorites")}
+            //           style={styles.icon}
+            //         />
+            //         {/* <IconButton
+            //           icon="cart-outline"
+            //           onPress={() => navigation.navigate("Cart")}
+            //         /> */}
+            //       </>
+            //     )} */}
+            //   </>
+            // ),
+            // })}
           />
           <Stack.Screen name="Category" component={Category} />
           <Stack.Screen name="ProductDetail" component={ProductDetail} />
@@ -141,6 +194,7 @@ function Root() {
             })}
           />
           <Stack.Screen name="Cart" component={Cart} />
+          <Stack.Screen name="Order" component={Order} />
           <Stack.Screen
             name="Search"
             component={Search}

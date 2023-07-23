@@ -1,7 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { ProductType } from "../types";
 import { RootState } from "../store";
-import { addToCart, clearCartItem, getCart, removeFromCart } from "../api";
+import {
+  addToCart,
+  clearCart,
+  clearCartItem,
+  getCart,
+  removeFromCart,
+} from "../api";
 
 const initialState: Cart = {
   loading: false,
@@ -70,6 +76,14 @@ export const getCartProducts = createAsyncThunk("/cart/get", async () => {
     return error.response.data;
   }
 });
+export const clearCartItems = createAsyncThunk("/cart/clear", async () => {
+  try {
+    const response = await clearCart();
+    return response.data;
+  } catch (error: any) {
+    return error.response.data;
+  }
+});
 
 const cartSlice = createSlice({
   name: "cartItems",
@@ -77,11 +91,9 @@ const cartSlice = createSlice({
   reducers: {
     // addToCartNoUser(state, action) {
     //   const cartItem: ProductType = action.payload;
-
     //   const existingItemInCart = state.cartItems.find(
     //     (item) => item.productId === cartItem._id
     //   );
-
     //   if (existingItemInCart && existingItemInCart.quantity) {
     //     return {
     //       ...state,
@@ -93,18 +105,14 @@ const cartSlice = createSlice({
     //       ),
     //     };
     //   }
-
     //   return {
     //     ...state,
     //     cartItems: [...state.cartItems, { ...cartItem, productId: cartItem._id, quantity: 1, totalPrice: cartItem.price }],
     //   };
     // },
-
     // removeFromCartNoUser(state, action) {
     //   const id = action.payload;
-
     //   const itemInCart = state.cartItems.find((item) => item.productId === id);
-
     //   if (itemInCart?.quantity === 1) {
     //     return {
     //       ...state,
@@ -121,7 +129,6 @@ const cartSlice = createSlice({
     //     };
     //   }
     // },
-
     // clearFromCartNoUser(state, action) {
     //   const id = action.payload;
     //   return {
@@ -130,10 +137,8 @@ const cartSlice = createSlice({
     //       (cartItem) => cartItem.productId !== id
     //     ),
     //   };
-
     // },
-
-    clearCartItems(state) {
+    clearCartItemsNoUser(state) {
       console.log("clearing...");
       state.cartItems = [];
     },
@@ -195,6 +200,20 @@ const cartSlice = createSlice({
         state.error = null;
         state.cartItems = action.payload.cart.products;
         state.totalPrice = action.payload.totalPrice;
+      })
+      .addCase(clearCartItems.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(clearCartItems.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        if (action.payload.message) {
+          state.error = action.payload.message;
+          return;
+        }
+        state.error = null;
+        state.cartItems = [];
+        state.totalPrice = 0;
       });
   },
 });
@@ -203,7 +222,7 @@ export const selectCartItems = (state: RootState) => state.cartItems.cartItems;
 export const selectTotalPrice = (state: RootState) =>
   state.cartItems.totalPrice;
 export const cartLoading = (state: RootState) => state.cartItems.loading;
-export const { clearCartItems } = cartSlice.actions;
+export const { clearCartItemsNoUser } = cartSlice.actions;
 
 // export const { addToCartNoUser, removeFromCartNoUser } = cartSlice.actions;
 
