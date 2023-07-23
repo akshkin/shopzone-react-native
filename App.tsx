@@ -115,70 +115,13 @@ function Root() {
                       onPress={() => navigation.navigate("Favorites")}
                       style={styles.icon}
                     />
-                    {/* <IconButton
-                        icon="cart-outline"
-                        onPress={() => navigation.navigate("Cart")}
-                      /> */}
                   </>
                 )}
               </>
             ),
           })}
         >
-          <Stack.Screen
-            name="Home"
-            component={Home}
-            // options={({ navigation }) => ({
-            // headerRight: () => (
-            //   <>
-            //     {/* <IconButton
-            //       icon="search-outline"
-            //       style={styles.icon}
-            //       onPress={() => navigation.navigate("Search")}
-            //     />
-            //     <IconButton
-            //       icon="person-circle-outline"
-            //       onPress={
-            //         authenticated
-            //           ? () => setIsOpen((prevOpen) => !prevOpen)
-            //           : () => navigation.navigate("SignIn")
-            //       }
-            //       style={styles.icon}
-            //     />
-            //     <IconButton
-            //       icon="cart-outline"
-            //       style={styles.icon}
-            //       onPress={() => navigation.navigate("Cart")}
-            //     /> */}
-            //     {/* {isOpen && (
-            //       <Pressable
-            //         onPress={signOut}
-            //         style={({ pressed }) =>
-            //           pressed
-            //             ? [styles.pressed, styles.signOutContainer]
-            //             : styles.signOutContainer
-            //         }
-            //       >
-            //         <Text>Sign out</Text>
-            //       </Pressable>
-            //     )} */}
-            //     {/* {authenticated && (
-            //       <>
-            //         <IconButton
-            //           icon="heart-outline"
-            //           onPress={() => navigation.navigate("Favorites")}
-            //           style={styles.icon}
-            //         />
-            //         {/* <IconButton
-            //           icon="cart-outline"
-            //           onPress={() => navigation.navigate("Cart")}
-            //         /> */}
-            //       </>
-            //     )} */}
-            //   </>
-            // ),
-            // })}
-          />
+          <Stack.Screen name="Home" component={Home} />
           <Stack.Screen name="Category" component={Category} />
           <Stack.Screen name="ProductDetail" component={ProductDetail} />
           <Stack.Screen
@@ -193,7 +136,18 @@ function Root() {
               ),
             })}
           />
-          <Stack.Screen name="Cart" component={Cart} />
+          <Stack.Screen
+            name="Cart"
+            component={Cart}
+            options={({ navigation }) => ({
+              headerRight: () => (
+                <IconButton
+                  icon="heart-outline"
+                  onPress={() => navigation.navigate("Favorites")}
+                />
+              ),
+            })}
+          />
           <Stack.Screen name="Order" component={Order} />
           <Stack.Screen
             name="Search"

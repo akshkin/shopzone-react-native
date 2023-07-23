@@ -6,21 +6,32 @@ import IconButton from "./IconButton";
 import { useAppDispatch, useAppSelector } from "../hooks/useAppDispatch";
 import { addProductToFavorites, selectFavorites } from "../features/favorites";
 import * as SecureStore from "expo-secure-store";
-import { addProductToCart } from "../features/cart";
+import { addProductToCart, selectCartItems } from "../features/cart";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../App";
 
 type ProductProps = {
   product: ProductType;
 };
 
+type ProductNavigationProps = NativeStackNavigationProp<
+  RootStackParamList,
+  "SignIn",
+  "ProductDetail"
+>;
+
 function ProductCard({ product }: ProductProps) {
-  const navigation = useNavigation();
+  const navigation = useNavigation<ProductNavigationProps>();
   const { title, rating, image, price } = product;
   const favorites = useAppSelector(selectFavorites);
   const dispatch = useAppDispatch();
+  const cartItems = useAppSelector(selectCartItems);
 
   const isFavorite = favorites.find(
     (favorite) => favorite.productId === product._id
   );
+
+  const inCart = cartItems.find((item) => item.productId === product._id);
 
   {
     /* <Ionicons name="ios-heart" size={24} color="black" />
@@ -42,7 +53,6 @@ function ProductCard({ product }: ProductProps) {
     if (token) {
       dispatch(addProductToCart({ cartItem: item }));
     } else {
-      // dispatch(addToCartNoUser(item));
       navigation.navigate("SignIn", {
         message:
           "We are working on the functionality of adding products to cart without logging in. Thank you for your patience.",
@@ -63,7 +73,7 @@ function ProductCard({ product }: ProductProps) {
         style={styles.heartIcon}
       />
       <IconButton
-        icon="ios-cart-outline"
+        icon={inCart ? "ios-cart-sharp" : "ios-cart-outline"}
         onPress={() => addItemToCart(product)}
         style={styles.cartIcon}
       />
