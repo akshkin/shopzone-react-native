@@ -20,6 +20,7 @@ import Search from "./screens/Search";
 import { clearCartItems, clearCartItemsNoUser } from "./features/cart";
 import Order from "./screens/Order";
 import Header from "./components/Header";
+import AllProducts from "./screens/AllProducts";
 
 export type RootStackParamList = {
   Home: undefined;
@@ -34,6 +35,7 @@ export type RootStackParamList = {
   Cart: undefined;
   Search: undefined;
   Order: undefined;
+  AllProducts: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -92,6 +94,7 @@ function Root() {
           <Stack.Screen name="Favorites" component={Favorites} />
           <Stack.Screen name="Cart" component={Cart} />
           <Stack.Screen name="Order" component={Order} />
+          <Stack.Screen name="AllProducts" component={AllProducts} />
           <Stack.Screen
             name="Search"
             component={Search}
