@@ -94,7 +94,11 @@ function Root() {
           <Stack.Screen name="Favorites" component={Favorites} />
           <Stack.Screen name="Cart" component={Cart} />
           <Stack.Screen name="Order" component={Order} />
-          <Stack.Screen name="AllProducts" component={AllProducts} />
+          <Stack.Screen
+            name="AllProducts"
+            component={AllProducts}
+            options={{ title: "All Products" }}
+          />
           <Stack.Screen
             name="Search"
             component={Search}

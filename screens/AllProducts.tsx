@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { FlatList, Pressable, Text } from "react-native";
+import { FlatList, Pressable, Text, StyleSheet } from "react-native";
 import Filter from "../components/Filter";
 import { fetchAllProducts } from "../api";
 import { ProductType } from "../types";
+import { AntDesign } from "@expo/vector-icons";
 import ProductCard from "../components/ProductCard";
 
 function AllProducts() {
@@ -19,8 +20,14 @@ function AllProducts() {
 
   return (
     <>
-      {/* <Pressable onPress={() => setIsOpen(true)}>
-        <Text>open</Text>
+      {/* <Pressable
+        style={({ pressed }) =>
+          pressed ? [styles.pressed, styles.filter] : styles.filter
+        }
+        onPress={() => setIsOpen(true)}
+      >
+        <AntDesign name="filter" size={24} color="black" />
+        <Text>Filter</Text>
       </Pressable> */}
       <FlatList
         data={products}
@@ -34,3 +41,15 @@ function AllProducts() {
 }
 
 export default AllProducts;
+
+const styles = StyleSheet.create({
+  filter: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 4,
+    margin: 8,
+  },
+  pressed: {
+    opacity: 0.5,
+  },
+});
