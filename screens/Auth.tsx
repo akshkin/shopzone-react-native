@@ -13,9 +13,9 @@ import {
   signUpUser,
 } from "../features/auth";
 
-type AuthScreenProps = NativeStackScreenProps<RootStackParamList>;
+type AuthScreenProps = NativeStackScreenProps<RootStackParamList, "SignIn">;
 
-function Auth({ navigation }: AuthScreenProps) {
+function Auth({ navigation, route }: AuthScreenProps) {
   const [isLoggingIn, setIsLoggingIn] = useState(true);
   const [formFields, setFormFields] = useState({
     name: "",
@@ -26,6 +26,8 @@ function Auth({ navigation }: AuthScreenProps) {
   const loading = useAppSelector(authLoading);
   const dispatch = useAppDispatch();
   const token = useAppSelector(authToken);
+
+  const routeMessage = route.params?.message;
 
   function handleChange(name: string, value: string) {
     setFormFields((prevFormFields) => ({ ...prevFormFields, [name]: value }));
@@ -47,6 +49,7 @@ function Auth({ navigation }: AuthScreenProps) {
 
   return (
     <ScrollView>
+      {routeMessage && <Text style={styles.errorText}>{routeMessage}</Text>}
       <Text h3 style={styles.heading}>
         {isLoggingIn ? "Sign in!" : "Sign up!"}
       </Text>
@@ -136,6 +139,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   errorText: {
+    marginTop: 8,
     color: "red",
     textAlign: "center",
     padding: 8,

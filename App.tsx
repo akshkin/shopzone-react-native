@@ -14,6 +14,13 @@ import { useAppDispatch, useAppSelector } from "./hooks/useAppDispatch";
 import * as SplashScreen from "expo-splash-screen";
 import * as SecureStore from "expo-secure-store";
 import { authToken, signOutUser } from "./features/auth";
+import Favorites from "./screens/Favorites";
+import Cart from "./screens/Cart";
+import Search from "./screens/Search";
+import { clearCartItems, clearCartItemsNoUser } from "./features/cart";
+import Order from "./screens/Order";
+import Header from "./components/Header";
+import AllProducts from "./screens/AllProducts";
 
 export type RootStackParamList = {
   Home: undefined;
@@ -23,7 +30,12 @@ export type RootStackParamList = {
       }
     | undefined;
   ProductDetail: undefined | { productId: string };
-  SignIn: undefined;
+  SignIn: undefined | { message: string };
+  Favorites: undefined;
+  Cart: undefined;
+  Search: undefined;
+  Order: undefined;
+  AllProducts: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -39,6 +51,7 @@ function Root() {
     dispatch(signOutUser());
     setAuthenticated(false);
     setIsOpen(false);
+    dispatch(clearCartItemsNoUser());
   };
 
   useEffect(() => {
@@ -63,50 +76,34 @@ function Root() {
   return (
     <View style={styles.container} onLayout={onLayoutRootView}>
       <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="Home"
-            component={Home}
-            options={({ navigation }) => ({
-              headerRight: () => (
-                <>
-                  <IconButton
-                    icon="person-circle-outline"
-                    onPress={
-                      authenticated
-                        ? () => setIsOpen((prevOpen) => !prevOpen)
-                        : () => navigation.navigate("SignIn")
-                    }
-                    style={styles.icon}
-                  />
-                  {isOpen && (
-                    <Pressable
-                      onPress={signOut}
-                      style={({ pressed }) =>
-                        pressed
-                          ? [styles.pressed, styles.signOutContainer]
-                          : styles.signOutContainer
-                      }
-                    >
-                      <Text>Sign out</Text>
-                    </Pressable>
-                  )}
-                  {authenticated && (
-                    <>
-                      <IconButton
-                        icon="heart-outline"
-                        onPress={() => {}}
-                        style={styles.icon}
-                      />
-                      <IconButton icon="cart-outline" onPress={() => {}} />
-                    </>
-                  )}
-                </>
-              ),
-            })}
-          />
+        <Stack.Navigator
+          screenOptions={({ navigation }) => ({
+            headerRight: () => (
+              <Header
+                isOpen={isOpen}
+                authenticated={authenticated}
+                setIsOpen={setIsOpen}
+                signOut={signOut}
+              />
+            ),
+          })}
+        >
+          <Stack.Screen name="Home" component={Home} />
           <Stack.Screen name="Category" component={Category} />
           <Stack.Screen name="ProductDetail" component={ProductDetail} />
+          <Stack.Screen name="Favorites" component={Favorites} />
+          <Stack.Screen name="Cart" component={Cart} />
+          <Stack.Screen name="Order" component={Order} />
+          <Stack.Screen
+            name="AllProducts"
+            component={AllProducts}
+            options={{ title: "All Products" }}
+          />
+          <Stack.Screen
+            name="Search"
+            component={Search}
+            options={{ title: "Search Products" }}
+          />
           <Stack.Screen
             name="SignIn"
             component={Auth}

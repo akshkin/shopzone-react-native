@@ -4,12 +4,13 @@ import { Ionicons } from "@expo/vector-icons";
 
 type IconButtonProps = {
   icon: keyof typeof Ionicons.glyphMap;
-  color?: "#006d77";
-  style?: any;
   onPress: () => void;
+  color?: "#006d77" | string;
+  style?: any;
+  size?: number;
 };
 
-function IconButton({ icon, color, style, onPress }: IconButtonProps) {
+function IconButton({ icon, color, style, onPress, size }: IconButtonProps) {
   return (
     <Pressable
       style={({ pressed }) =>
@@ -19,7 +20,7 @@ function IconButton({ icon, color, style, onPress }: IconButtonProps) {
       }
       onPress={onPress}
     >
-      <Ionicons name={icon} color={color} size={24} />
+      <Ionicons name={icon} color={color} size={size ? size : 24} />
     </Pressable>
   );
 }

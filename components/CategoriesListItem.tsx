@@ -1,6 +1,8 @@
 import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack/lib/typescript/src/types";
 import React from "react";
 import { Image, StyleSheet, TouchableOpacity, View, Text } from "react-native";
+import { RootStackParamList } from "../App";
 
 type ItemProps = {
   category: string;
@@ -8,8 +10,13 @@ type ItemProps = {
   route: string;
 };
 
+type CategoryNavigationProps = NativeStackNavigationProp<
+  RootStackParamList,
+  "Category"
+>;
+
 function CategoriesListItem({ item }: { item: ItemProps }) {
-  const navigation = useNavigation();
+  const navigation = useNavigation<CategoryNavigationProps>();
   const { category, imageUrl } = item;
 
   function routeToCategory() {

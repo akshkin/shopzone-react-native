@@ -41,7 +41,6 @@ export const signUpUser = createAsyncThunk(
 
 export const signOutUser = createAsyncThunk("auth/signout", async () => {
   try {
-    console.log("logging out");
     await signOut();
     await SecureStore.deleteItemAsync("token");
   } catch (error: any) {
