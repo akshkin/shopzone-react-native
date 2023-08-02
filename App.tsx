@@ -88,7 +88,11 @@ function Root() {
             ),
           })}
         >
-          <Stack.Screen name="Home" component={Home} />
+          <Stack.Screen
+            name="Home"
+            component={Home}
+            options={{ title: "SHOPZONE" }}
+          />
           <Stack.Screen name="Category" component={Category} />
           <Stack.Screen name="ProductDetail" component={ProductDetail} />
           <Stack.Screen name="Favorites" component={Favorites} />
