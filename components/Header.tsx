@@ -21,6 +21,7 @@ function Header({ authenticated, isOpen, setIsOpen, signOut }: HeaderProps) {
   const showFavoritesIcon = route.name !== "Favorites";
   const showSearchIcon = route.name !== "Search";
   const showCartIcon = route.name !== "Cart";
+  const showAvatarIcon = route.name !== "SignIn";
 
   return (
     <>
@@ -31,15 +32,17 @@ function Header({ authenticated, isOpen, setIsOpen, signOut }: HeaderProps) {
           onPress={() => navigation.navigate("Search")}
         />
       )}
-      <IconButton
-        icon="person-circle-outline"
-        onPress={
-          authenticated
-            ? () => setIsOpen((prevOpen) => !prevOpen)
-            : () => navigation.navigate("SignIn")
-        }
-        style={styles.icon}
-      />
+      {showAvatarIcon && (
+        <IconButton
+          icon="person-circle-outline"
+          onPress={
+            authenticated
+              ? () => setIsOpen((prevOpen) => !prevOpen)
+              : () => navigation.navigate("SignIn")
+          }
+          style={styles.icon}
+        />
+      )}
 
       {showCartIcon && (
         <IconButton
