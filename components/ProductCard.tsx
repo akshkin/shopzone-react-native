@@ -67,13 +67,13 @@ function ProductCard({ product }: ProductProps) {
   return (
     <View style={styles.container}>
       <IconButton
-        icon={isFavorite ? "ios-heart" : "heart-outline"}
+        icon={isFavorite ? "heart-sharp" : "heart-outline"}
         onPress={toggleFavorites}
         color="red"
         style={styles.heartIcon}
       />
       <IconButton
-        icon={inCart ? "ios-cart-sharp" : "ios-cart-outline"}
+        icon={inCart ? "cart-sharp" : "cart-outline"}
         onPress={() => addItemToCart(product)}
         style={styles.cartIcon}
       />
